@@ -112,26 +112,70 @@ const Broadband = () => {
     return true;
   };
   
-  const handleFinish = (e) => {
-    e.preventDefault(); // Prevent any default form behavior (useful if inside a form tag)
+  
+  // const handleFinish = (e) => {
+  //   e.preventDefault(); // Prevent any default form behavior (useful if inside a form tag)
     
-    if (validateForm()) {
-      console.log('📌 Form Data to Save:', JSON.stringify(formData, null, 2)); // Log formatted JSON in console
+  //   if (validateForm()) {
+  //     console.log('📌 Form Data to Save:', JSON.stringify(formData, null, 2)); // Log formatted JSON in console
   
-      alert('Form submitted! Check the console for data.'); // Notify user for testing
+  //     alert('Form submitted! Check the console for data.'); // Notify user for testing
   
-      // Clear form (Optional: Uncomment if you want to reset after submission)
-      setFormData({
-        firstName: '',
-        lastName: '',
-        phoneNumber: '',
-        email: '',
-        currentSupplier: '',
-        isHomeowner: '',
-        agreeToContact: false,
-        postcode: '',
-        selectedAddress: '',
+  //     // Clear form (Optional: Uncomment if you want to reset after submission)
+  //     setFormData({
+  //       firstName: '',
+  //       lastName: '',
+  //       phoneNumber: '',
+  //       email: '',
+  //       currentSupplier: '',
+  //       isHomeowner: '',
+  //       agreeToContact: false,
+  //       postcode: '',
+  //       selectedAddress: '',
+  //     });
+  //   }
+  // };
+
+  const handleFinish = async (e) => {
+    e.preventDefault();
+
+    // Validate form data before submission
+    if (!validateForm()) {
+      return;
+    }
+
+    try {
+      const response = await fetch('https://www.comparison-guru.co.uk/submit_data_bb.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
       });
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert('Form submitted successfully!');
+        // Clear form after successful submission
+        setFormData({
+          firstName: '',
+          lastName: '',
+          phoneNumber: '',
+          email: '',
+          currentSupplier: '',
+          isHomeowner: '',
+          agreeToContact: false,
+          postcode: '',
+          selectedAddress: '',
+        });
+        setStep(1); // Reset to Step 1
+      } else {
+        alert(`Error: ${result.message}`);
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      alert('An error occurred. Please try again.');
     }
   };
   

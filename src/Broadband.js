@@ -100,21 +100,42 @@ const Broadband = () => {
     }));
   };
 
-  const handleCurrentSupplierChange = (e) => {
-    const value = e.target.value;
-    setFormData((prev) => ({
-      ...prev,
-      currentSupplier: value,
-    }));
+  const validateForm = () => {
+    if (!formData.firstName || !formData.lastName || !formData.phoneNumber || !formData.email) {
+      alert('Please complete all required fields.');
+      return false;
+    }
+    if (!formData.agreeToContact) {
+      alert('You must agree to be contacted.');
+      return false;
+    }
+    return true;
   };
   
-  const handleIsHomeownerChange = (e) => {
-    const value = e.target.value;
-    setFormData((prev) => ({
-      ...prev,
-      isHomeowner: value,
-    }));
+  const handleFinish = (e) => {
+    e.preventDefault(); // Prevent any default form behavior (useful if inside a form tag)
+    
+    if (validateForm()) {
+      console.log('📌 Form Data to Save:', JSON.stringify(formData, null, 2)); // Log formatted JSON in console
+  
+      alert('Form submitted! Check the console for data.'); // Notify user for testing
+  
+      // Clear form (Optional: Uncomment if you want to reset after submission)
+      setFormData({
+        firstName: '',
+        lastName: '',
+        phoneNumber: '',
+        email: '',
+        currentSupplier: '',
+        isHomeowner: '',
+        agreeToContact: false,
+        postcode: '',
+        selectedAddress: '',
+      });
+    }
   };
+  
+  
   
   
 
@@ -208,26 +229,44 @@ const Broadband = () => {
               <div className="space-y-4">
                 <input
                   type="text"
+                  name="firstName"
                   placeholder="First Name"
+                  value={formData.firstName}
+                  onChange={handleFormChange}
                   className="border border-gray-300 p-2 w-full rounded-md"
                 />
                 <input
                   type="text"
+                  name="lastName"
                   placeholder="Last Name"
+                  value={formData.lastName}
+                  onChange={handleFormChange}
                   className="border border-gray-300 p-2 w-full rounded-md"
                 />
                 <input
                   type="tel"
+                  name="phoneNumber"
                   placeholder="Phone Number"
+                  value={formData.phoneNumber}
+                  onChange={handleFormChange}
                   className="border border-gray-300 p-2 w-full rounded-md"
                 />
                 <input
                   type="email"
+                  name="email"
                   placeholder="Email Address"
+                  value={formData.email}
+                  onChange={handleFormChange}
                   className="border border-gray-300 p-2 w-full rounded-md"
                 />
                 <div className="flex items-center">
-                  <input type="checkbox" className="mr-2" />
+                <input
+                  type="checkbox"
+                  name="agreeToContact"
+                  checked={formData.agreeToContact}
+                  onChange={handleFormChange}
+                  className="mr-2"
+                />
                   <label className="text-sm text-gray-600">
                     I agree to be contacted regarding this offer
                   </label>
@@ -242,6 +281,7 @@ const Broadband = () => {
                 Back
               </button>
               <button
+                onClick={handleFinish}
                 className="bg-light-purple text-white px-4 py-2 rounded-md hover:bg-light-purple-h transition duration-300"
               >
                 Finish
@@ -259,24 +299,36 @@ const Broadband = () => {
             <img src={Exclusive} alt="Provider Logo" className="w-4/4 mx-auto mb-4" />
             <div className="bg-gray-50 p-6 rounded-lg shadow-lg">
               <div className="space-y-4">
-                <input
+              <input
                   type="text"
+                  name="firstName"
                   placeholder="First Name"
+                  value={formData.firstName}
+                  onChange={handleFormChange}
                   className="border border-gray-300 p-2 w-full rounded-md"
                 />
                 <input
                   type="text"
+                  name="lastName"
                   placeholder="Last Name"
+                  value={formData.lastName}
+                  onChange={handleFormChange}
                   className="border border-gray-300 p-2 w-full rounded-md"
                 />
                 <input
                   type="tel"
+                  name="phoneNumber"
                   placeholder="Phone Number"
+                  value={formData.phoneNumber}
+                  onChange={handleFormChange}
                   className="border border-gray-300 p-2 w-full rounded-md"
                 />
                 <input
                   type="email"
+                  name="email"
                   placeholder="Email Address"
+                  value={formData.email}
+                  onChange={handleFormChange}
                   className="border border-gray-300 p-2 w-full rounded-md"
                 />
                 <input
@@ -296,7 +348,13 @@ const Broadband = () => {
                   className="border border-gray-300 p-2 w-full rounded-md"
                 />
                 <div className="flex items-center">
-                  <input type="checkbox" className="mr-2" />
+                  <input
+                    type="checkbox"
+                    name="agreeToContact"
+                    checked={formData.agreeToContact}
+                    onChange={handleFormChange}
+                    className="mr-2"
+                  />
                   <label className="text-sm text-gray-600">
                     I agree to be contacted regarding this offer
                   </label>
@@ -311,6 +369,7 @@ const Broadband = () => {
                 Back
               </button>
               <button
+                onClick={handleFinish}
                 className="bg-light-purple text-white px-4 py-2 rounded-md hover:bg-light-purple-h transition duration-300"
               >
                 Finish

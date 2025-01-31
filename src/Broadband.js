@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import CG_logo from './Graphic/logo.png';
-
+import Exclusive from './Graphic/Exclusive.jpg';
 
 const Broadband = () => {
   const [step, setStep] = useState(1);
@@ -8,6 +8,19 @@ const Broadband = () => {
   const [addresses, setAddresses] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    phoneNumber: '',
+    email: '',
+    currentSupplier: '', // Captured in Step 4
+    isHomeowner: '', // New field for Step 4
+    agreeToContact: false, // Captured in Steps 3 and 4
+    postcode: '', // Captured in Step 1
+    selectedAddress: '', // Captured in Step 2
+  });
+  
 
   const fetchAddresses = async () => {
     setLoading(true);
@@ -42,24 +55,69 @@ const Broadband = () => {
     fetchAddresses();
   };
 
-  const handleBack = () => {
-    setStep(1); // Go back to Step 1
-    setAddresses([]); // Clear any previous addresses
+  const handleBack = (prevStep) => {
+    setStep(prevStep); // Go back to the previous step
+    if (prevStep === 1) {
+      setAddresses([]); // Clear any previous addresses
+    }
   };
 
   const handleAddressSelect = (event) => {
-    setSelectedAddress(event.target.value);
+    const value = event.target.value;
+    setSelectedAddress(value);
+    setFormData((prev) => ({
+      ...prev,
+      selectedAddress: value,
+    }));
+  };
+  
+
+  const handleNext = () => {
+    if (step === 2 && selectedAddress) {
+      setStep(4); // Move to Step 4
+    }
   };
 
   const handlePostcodeChange = (e) => {
     const value = e.target.value.toUpperCase().replace(/[^A-Z0-9\s]/g, ''); // Allow only alphanumeric and spaces
     setPostcode(value);
+    setFormData((prev) => ({
+      ...prev,
+      postcode: value,
+    }));
   };
   
+
   const handlePostcodeBlur = () => {
     setPostcode((prev) => prev.trim());
   };
+
+  const handleFormChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value,
+    }));
+  };
+
+  const handleCurrentSupplierChange = (e) => {
+    const value = e.target.value;
+    setFormData((prev) => ({
+      ...prev,
+      currentSupplier: value,
+    }));
+  };
   
+  const handleIsHomeownerChange = (e) => {
+    const value = e.target.value;
+    setFormData((prev) => ({
+      ...prev,
+      isHomeowner: value,
+    }));
+  };
+  
+  
+
   return (
     <div className="text-center p-8 bg-gray-100 min-h-screen">
       <h1 className="text-3xl font-semibold mb-6 text-gray-600">Broadband Comparison</h1>
@@ -116,12 +174,13 @@ const Broadband = () => {
             </select>
             <div className="flex justify-between mt-4">
               <button
-                onClick={handleBack}
+                onClick={() => handleBack(1)}
                 className="text-gray-500 px-4 py-2 rounded-md transition duration-300 hover:text-gray-700"
               >
                 Back
               </button>
               <button
+                onClick={handleNext}
                 disabled={!selectedAddress} // Disable Next button until an address is selected
                 className={`px-4 py-2 rounded-md transition duration-300 ${
                   selectedAddress
@@ -136,76 +195,129 @@ const Broadband = () => {
         )}
 
         {/* Step 3: No Address Found */}
-{step === 3 && (
-  <>
-    <h2 className="text-lg font-medium text-gray-600 mb-4">
-      We're awaiting the best deal for your area.
-    </h2>
-    <p className="text-gray-500 mb-4">
-      Register your interest below, and we'll be in touch.
-    </p>
-    <img src={CG_logo} alt="Provider Logo" className="w-3/4 mx-auto mb-4" />
-    <div className="bg-gray-50 p-6 rounded-lg shadow-lg">
-      {/* <h3 className="text-lg font-semibold mb-4 text-gray-600">
-        Please enter your contact details
-      </h3> */}
-      <div className="space-y-4">
-        <input
-          type="text"
-          placeholder="First Name"
-          className="border border-gray-300 p-2 w-full rounded-md"
-        />
-        <input
-          type="text"
-          placeholder="Last Name"
-          className="border border-gray-300 p-2 w-full rounded-md"
-        />
-        <input
-          type="tel"
-          placeholder="Phone Number"
-          className="border border-gray-300 p-2 w-full rounded-md"
-        />
-        <input
-          type="email"
-          placeholder="Email Address"
-          className="border border-gray-300 p-2 w-full rounded-md"
-        />
-        <div className="flex items-center">
-          <input
-            type="checkbox"
-            className="mr-2"
-          />
-          <label className="text-sm text-gray-600">
-            I agree to be contacted regarding this offer
-          </label>
-        </div>
-      </div>
-    </div>
-    <div className="flex justify-between mt-8">
-      <button
-        onClick={handleBack}
-        className="flex items-center text-gray-500 px-4 py-2 rounded-md transition duration-300 hover:text-gray-700"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-4 w-4 mr-2"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-        </svg>
-        Back
-      </button>
-      <button
-        className="bg-light-purple text-white px-4 py-2 rounded-md hover:bg-light-purple-h transition duration-300"
-      >
-        Finish
-      </button>
-    </div>
-  </>
-)}
+        {step === 3 && (
+          <>
+            <h2 className="text-lg font-medium text-gray-600 mb-4">
+              We're awaiting the best deal for your area.
+            </h2>
+            <p className="text-gray-500 mb-4">
+              Register your interest below, and we'll be in touch.
+            </p>
+            <img src={CG_logo} alt="Provider Logo" className="w-3/4 mx-auto mb-4" />
+            <div className="bg-gray-50 p-6 rounded-lg shadow-lg">
+              <div className="space-y-4">
+                <input
+                  type="text"
+                  placeholder="First Name"
+                  className="border border-gray-300 p-2 w-full rounded-md"
+                />
+                <input
+                  type="text"
+                  placeholder="Last Name"
+                  className="border border-gray-300 p-2 w-full rounded-md"
+                />
+                <input
+                  type="tel"
+                  placeholder="Phone Number"
+                  className="border border-gray-300 p-2 w-full rounded-md"
+                />
+                <input
+                  type="email"
+                  placeholder="Email Address"
+                  className="border border-gray-300 p-2 w-full rounded-md"
+                />
+                <div className="flex items-center">
+                  <input type="checkbox" className="mr-2" />
+                  <label className="text-sm text-gray-600">
+                    I agree to be contacted regarding this offer
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div className="flex justify-between mt-8">
+              <button
+                onClick={() => handleBack(1)}
+                className="text-gray-500 px-4 py-2 rounded-md transition duration-300 hover:text-gray-700"
+              >
+                Back
+              </button>
+              <button
+                className="bg-light-purple text-white px-4 py-2 rounded-md hover:bg-light-purple-h transition duration-300"
+              >
+                Finish
+              </button>
+            </div>
+          </>
+        )}
 
+        {/* Step 4: Custom Page After Address Selection */}
+        {step === 4 && (
+          <>
+            <h2 className="text-lg font-medium text-gray-600 mb-4">
+              Unlock Your Exclusive Deal - Just for You!
+            </h2>
+            <img src={Exclusive} alt="Provider Logo" className="w-4/4 mx-auto mb-4" />
+            <div className="bg-gray-50 p-6 rounded-lg shadow-lg">
+              <div className="space-y-4">
+                <input
+                  type="text"
+                  placeholder="First Name"
+                  className="border border-gray-300 p-2 w-full rounded-md"
+                />
+                <input
+                  type="text"
+                  placeholder="Last Name"
+                  className="border border-gray-300 p-2 w-full rounded-md"
+                />
+                <input
+                  type="tel"
+                  placeholder="Phone Number"
+                  className="border border-gray-300 p-2 w-full rounded-md"
+                />
+                <input
+                  type="email"
+                  placeholder="Email Address"
+                  className="border border-gray-300 p-2 w-full rounded-md"
+                />
+                <input
+                  type="text"
+                  name="currentSupplier"
+                  placeholder="Current Supplier"
+                  value={formData.currentSupplier}
+                  onChange={handleFormChange}
+                  className="border border-gray-300 p-2 w-full rounded-md"
+                />
+                <input
+                  type="text"
+                  name="isHomeowner"
+                  placeholder="Are you a homeowner?"
+                  value={formData.isHomeowner}
+                  onChange={handleFormChange}
+                  className="border border-gray-300 p-2 w-full rounded-md"
+                />
+                <div className="flex items-center">
+                  <input type="checkbox" className="mr-2" />
+                  <label className="text-sm text-gray-600">
+                    I agree to be contacted regarding this offer
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div className="flex justify-between mt-8">
+              <button
+                onClick={() => handleBack(1)}
+                className="text-gray-500 px-4 py-2 rounded-md transition duration-300 hover:text-gray-700"
+              >
+                Back
+              </button>
+              <button
+                className="bg-light-purple text-white px-4 py-2 rounded-md hover:bg-light-purple-h transition duration-300"
+              >
+                Finish
+              </button>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

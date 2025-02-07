@@ -14,11 +14,11 @@ const Broadband = () => {
     lastName: '',
     phoneNumber: '',
     email: '',
-    currentSupplier: '', // Captured in Step 4
-    isHomeowner: '', // New field for Step 4
-    agreeToContact: false, // Captured in Steps 3 and 4
-    postcode: '', // Captured in Step 1
-    selectedAddress: '', // Captured in Step 2
+    currentSupplier: '', 
+    isHomeowner: '', 
+    agreeToContact: false, 
+    postcode: '', 
+    selectedAddress: '', 
   });
   
 
@@ -26,7 +26,7 @@ const Broadband = () => {
     setLoading(true);
     try {
       const encodedPostcode = encodeURIComponent(postcode.trim());
-      const apiUrl = `http://docker.apx-gis.com:8039/api/v1/uprn/uprnByPostcode/${encodedPostcode}?token=vantage-08c86f0a-7177-4960-8811-1723`;
+      const apiUrl = `https://fibreos.freshfibre.co.uk/api/v1/uprn/uprnByPostcode/${encodedPostcode}?token=vantage-08c86f0a-7177-4960-8811-1723`;
 
       const response = await fetch(apiUrl);
       const data = await response.json();
@@ -100,41 +100,39 @@ const Broadband = () => {
     }));
   };
 
-  const validateForm = () => {
-    if (!formData.firstName || !formData.lastName || !formData.phoneNumber || !formData.email) {
-      alert('Please complete all required fields.');
-      return false;
-    }
-    if (!formData.agreeToContact) {
-      alert('You must agree to be contacted.');
-      return false;
-    }
-    return true;
+  const validatePhoneNumber = (phone) => {
+    const ukPhoneRegex = /^(?:\+44|0)7\d{8,9}$/; 
+    return ukPhoneRegex.test(phone);
   };
   
-  
-  // const handleFinish = (e) => {
-  //   e.preventDefault(); // Prevent any default form behavior (useful if inside a form tag)
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
+    return emailRegex.test(email);
+  };
+
+  const validateForm = () => {
+    if (!formData.firstName || !formData.lastName || !formData.phoneNumber || !formData.email) {
+      alert('❌ Please complete all required fields.');
+      return false;
+    }
     
-  //   if (validateForm()) {
-  //     console.log('📌 Form Data to Save:', JSON.stringify(formData, null, 2)); // Log formatted JSON in console
+    if (!validatePhoneNumber(formData.phoneNumber)) {
+      alert('❌ Please enter a valid UK phone number (starting with +44 or 07).');
+      return false;
+    }
   
-  //     alert('Form submitted! Check the console for data.'); // Notify user for testing
+    if (!validateEmail(formData.email)) {
+      alert('❌ Please enter a valid email address.');
+      return false;
+    }
   
-  //     // Clear form (Optional: Uncomment if you want to reset after submission)
-  //     setFormData({
-  //       firstName: '',
-  //       lastName: '',
-  //       phoneNumber: '',
-  //       email: '',
-  //       currentSupplier: '',
-  //       isHomeowner: '',
-  //       agreeToContact: false,
-  //       postcode: '',
-  //       selectedAddress: '',
-  //     });
-  //   }
-  // };
+    if (!formData.agreeToContact) {
+      alert('❌ You must agree to be contacted.');
+      return false;
+    }
+  
+    return true;
+  };
 
   const handleFinish = async (e) => {
     e.preventDefault();
@@ -178,9 +176,6 @@ const Broadband = () => {
       alert('An error occurred. Please try again.');
     }
   };
-  
-  
-  
   
 
   return (

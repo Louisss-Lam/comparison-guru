@@ -119,17 +119,20 @@ const App = () => {
 </div>
 
 
-                  {/* Call to Action Button */}
-                  <div className="text-center mb-12">
-                    <Link to="/energy" className="inline-block bg-light-purple text-white font-bold py-3 px-6 rounded-full text-lg hover:bg-dark-purple transition duration-300">
-                      Save Your Money Today
-                    </Link>
-                  </div>
+                  {/* Call to Action Buttons (Side by Side) */}
+<div className="flex justify-center space-x-16 mb-12">
+  <Link to="/energy" className="bg-light-purple text-white font-bold py-3 px-6 rounded-full text-lg hover:bg-dark-purple transition duration-300">
+    Compare Energy Deals
+  </Link>
+  <Link to="/broadband" className="bg-light-purple text-white font-bold py-3 px-6 rounded-full text-lg hover:bg-dark-purple transition duration-300">
+    Find the Best Broadband Plan
+  </Link>
+</div>
 
                   {/* Broadband Coming Soon Banner */}
-                  <div className="text-center">
+                  {/* <div className="text-center">
                     <img src={BroadbandBanner} alt="Broadband Coming Soon" className="w-full h-auto" />
-                  </div>
+                  </div> */}
                 </div>
               }
             />

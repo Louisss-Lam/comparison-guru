@@ -1,7 +1,9 @@
 import React, { useState, useRef } from 'react';
 import SpLogo from './Graphic/SpLogo.jpg';
+import { useNavigate } from 'react-router-dom';
 
 const Energy = () => {
+  const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [postcode, setPostcode] = useState('');
   const [addresses, setAddresses] = useState([]); // Store the addresses from API
@@ -157,16 +159,16 @@ const Energy = () => {
       });
   
       const result = await response.text();
-      if (response.ok) {
-        alert('Data submitted successfully!');
-        resetForm();
-      } else {
-        alert(`Error: ${result}`);
-      }
+        if (response.ok) {
+            navigate('/confirmation'); // Redirect to Confirmation page after success
+        } else {
+            alert(`Error: ${result}`);
+        }
     } catch (error) {
-      console.error('Submission error:', error);
-      alert('An error occurred while submitting data. Please try again.');
+        console.error('Submission error:', error);
+        alert('An error occurred while submitting data. Please try again.');
     }
+
   };
   
   

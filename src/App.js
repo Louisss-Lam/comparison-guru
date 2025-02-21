@@ -8,6 +8,7 @@ import Energy from './Energy';
 import Broadband from './Broadband';
 import Careers from './Careers';
 import PrivacyPolicy from './PrivacyPolicy';
+import Confirmation from './Confirmation';
 import HeroBanner from './Graphic/heroBanner.jpg';
 import Step1Image from './Graphic/search.png';
 import Step2Image from './Graphic/chat.png';
@@ -148,6 +149,9 @@ const App = () => {
 
             {/* Privacy Policy Page Route */}
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            
+            {/* Confirmation */}
+            <Route path="/confirmation" element={<Confirmation />} />
           </Routes>
         </main>
       </div>

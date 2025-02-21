@@ -26,7 +26,7 @@ const Broadband = () => {
     setLoading(true);
     try {
       const encodedPostcode = encodeURIComponent(postcode.trim());
-      const apiUrl = `https://fibreos.freshfibre.co.uk/api/v1/uprn/uprnByPostcode/${encodedPostcode}?token=vantage-08c86f0a-7177-4960-8811-1723`;
+      const apiUrl = `https://fibreos.freshfibre.co.uk/api/v1/uprn/uprnByPostcode/${encodedPostcode}?token=vantage-2f025b70-5f93-0d72-4fd8-d013`;
 
       const response = await fetch(apiUrl);
       const data = await response.json();

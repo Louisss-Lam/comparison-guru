@@ -14,6 +14,7 @@ const Energy = () => {
   const [customerDetails, setCustomerDetails] = useState({
     firstName: '',
     lastName: '',
+    dateOfBirth:'',
     phoneNumber: '',
     email: '',
     optIn: false,
@@ -26,6 +27,7 @@ const Energy = () => {
     setCustomerDetails({
       firstName: '',
       lastName: '',
+      dateOfBirth:'',
       phoneNumber: '',
       email: '',
       optIn: false,
@@ -84,63 +86,6 @@ const Energy = () => {
     }
   };
 
-  // const submitData = async () => {
-  //   if (!customerDetails.firstName || !customerDetails.lastName || !customerDetails.phoneNumber || !customerDetails.email) {
-  //     alert("Please fill in all required fields: First Name, Last Name, Phone Number, and Email.");
-  //     return;
-  // }
-   
-  //   try {
-  //     const response = await fetch('https://www.comparison-guru.co.uk/save_customer_info.php', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/x-www-form-urlencoded',
-  //       },
-  //       body: new URLSearchParams({
-  //         first_name: customerDetails.firstName,
-  //         last_name: customerDetails.lastName,
-  //         phone_number: customerDetails.phoneNumber,
-  //         email: customerDetails.email,
-  //         opt_in: customerDetails.optIn ? 'Yes' : 'No',
-  //         postcode: postcode,
-  //         is_homeowner: isHomeowner ? 'Yes' : 'No',
-  //         energy_type: energyType,
-  //         electricity_supplier: electricitySupplier,
-  //         other_supplier: otherSupplier,
-  //         bill_payment_method: billPaymentMethod,
-  //         address: selectedAddress, 
-  //       }),
-  //     });
-  
-  //     const result = await response.text();
-  //     if (response.ok) {
-  //       alert("Data submitted successfully!");
-  //       // Optionally, you could reset the form after submission
-  //       setStep(1); // Reset to first step
-  //       setCustomerDetails({
-  //         firstName: '',
-  //         lastName: '',
-  //         phoneNumber: '',
-  //         email: '',
-  //         optIn: false,
-  //       });
-  //       setPostcode('');
-  //       setIsHomeowner(null);
-  //       setEnergyType(null);
-  //       setElectricitySupplier('');
-  //       setOtherSupplier('');
-  //       setBillPaymentMethod('');
-  //       setAddresses([]);
-  //       setSelectedAddress('');
-  //     } else {
-  //       alert(`Error: ${result}`);
-  //     }
-  //   } catch (error) {
-  //     console.error("Submission error:", error);
-  //     alert("An error occurred while submitting data. Please try again.");
-  //   }
-  // };
-
   const submitData = async () => {
     const ukPhoneRegex = /^(?:0|\+44)(?:\d\s?){9,10}$/;
   
@@ -151,6 +96,10 @@ const Energy = () => {
     }
     if (!customerDetails.lastName) {
       alert('Please fill in your Last Name.');
+      return;
+    }
+    if (!customerDetails.dateOfBirth) {
+      alert('Please fill in your Date Of Birth.');
       return;
     }
     if (!customerDetails.phoneNumber) {
@@ -194,6 +143,7 @@ const Energy = () => {
         body: new URLSearchParams({
           first_name: customerDetails.firstName,
           last_name: customerDetails.lastName,
+          date_of_birth: customerDetails.dateOfBirth,
           phone_number: phoneNumber,
           email: customerDetails.email,
           opt_in: customerDetails.optIn ? 'Yes' : 'No',
@@ -432,6 +382,15 @@ const Energy = () => {
                   value={customerDetails.lastName}
                   onChange={handleInputChange}
                   placeholder="Last Name"
+                  className="border border-gray-300 p-2 w-full rounded-md"
+                />
+                {/* Date of Birth Field */}
+                <input
+                  type="date"
+                  name="dateOfBirth"
+                  value={customerDetails.dateOfBirth}
+                  onChange={handleInputChange}
+                  placeholder="Date of Birth"
                   className="border border-gray-300 p-2 w-full rounded-md"
                 />
                 <input

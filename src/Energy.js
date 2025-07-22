@@ -387,14 +387,19 @@ const Energy = () => {
                   className="border border-gray-300 p-2 w-full rounded-md"
                 />
                 {/* Date of Birth Field */}
-                <input
-                  type="date"
-                  name="dateOfBirth"
-                  value={customerDetails.dateOfBirth}
-                  onChange={handleInputChange}
-                  placeholder="Date of Birth"
-                  className="border border-gray-300 p-2 w-full rounded-md"
-                />
+
+                <label className="block text-gray-600">
+  Date of Birth:<span className="mr-2"></span>
+  <input
+    type="date"
+    name="dateOfBirth"
+    value={customerDetails.dateOfBirth}
+    onChange={handleInputChange}
+    className="border border-gray-300 p-2 w-full rounded-md text-gray-600 bg-white"
+    onFocus={(e) => e.target.showPicker && e.target.showPicker()}
+  />
+</label>
+
                 <input
                   type="tel"
                   name="phoneNumber"
@@ -411,16 +416,25 @@ const Energy = () => {
                   placeholder="Email Address"
                   className="border border-gray-300 p-2 w-full rounded-md"
                 />
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    name="optIn"
-                    checked={customerDetails.optIn}
-                    onChange={handleInputChange}
-                    className="mr-2"
-                  />
-                  <label htmlFor="optIn" className="text-sm text-gray-600">I agree to be contacted regarding this offer</label>
-                </div>
+                <div className="flex items-start space-x-2">
+  <input
+    id="optIn"
+    type="checkbox"
+    name="optIn"
+    checked={customerDetails.optIn}
+    onChange={handleInputChange}
+    className="mt-1"
+  />
+  <label htmlFor="optIn" className="text-sm text-gray-600 text-left">
+  By clicking the Submit button you confirm that you are over 18 years of age, 
+  responsible for paying your energy bills and agree to receive a call from 
+  ScottishPower on 0121 732 9512. Your data will be processed in accordance with our&nbsp;
+  <a href="https://www.comparison-guru.co.uk/privacy-policy" target="_blank" rel="noopener noreferrer" className="text-light-purple underline hover:text-dark-purple">
+    privacy policy
+  </a>.
+</label>
+
+</div>
               </div>
             </div>
           </>
@@ -465,7 +479,7 @@ const Energy = () => {
   onClick={submitData}
   className="bg-light-purple text-white px-4 py-2 rounded-md hover:bg-light-purple-h transition duration-300"
 >
-  Finish
+  Submit
 </button>
 
 
